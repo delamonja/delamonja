@@ -22,8 +22,10 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow: hidden; /* Importante para el efecto de escritorio */
+            overflow: hidden; 
             perspective: 1000px;
+            /* Evita el "pull-to-refresh" en móviles para que no estorbe la interacción */
+            overscroll-behavior-y: none; 
         }
 
         /* --- FONDO ANIMADO (CHISPAS) --- */
@@ -46,9 +48,9 @@
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(110vh) scale(0); opacity: 0; }
+            0% { transform: translateY(110vh) scale(0) rotate(0deg); opacity: 0; }
             20% { opacity: 0.4; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(1) rotate(360deg); opacity: 0; }
         }
 
         /* --- LAYOUT PRINCIPAL --- */
@@ -62,30 +64,45 @@
             box-sizing: border-box;
         }
 
-        /* TARJETA 3D */
         .card-container {
             position: relative;
             width: 100%;
             max-width: 480px;
             perspective: 1000px;
+            z-index: 10;
         }
 
         .card-3d {
-            background: rgba(255, 255, 255, 0.95); /* Un poco de transparencia */
+            background: rgba(255, 255, 255, 0.95);
             padding: 3rem 2rem;
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(27, 72, 83, 0.15);
             text-align: center;
             transform-style: preserve-3d;
-            /* Esta transición es clave para la suavidad en desktop */
-            transition: transform 0.1s ease-out; 
-            backdrop-filter: blur(5px); /* Efecto vidrio esmerilado */
+            will-change: transform; /* Optimización para móviles */
+            backdrop-filter: blur(5px);
         }
 
-        /* ELEMENTOS FLOTANTES (Efecto profundidad) */
-        .layer-1 { transform: translateZ(20px); } /* Logo */
-        .layer-2 { transform: translateZ(30px); } /* Textos */
-        .layer-3 { transform: translateZ(50px); } /* Botones (lo más cercano) */
+        /* Animación suave de regreso cuando sueltas el mouse/dedo */
+        .card-smooth-return {
+            transition: transform 0.5s ease-out;
+        }
+
+        /* Animación de "respiración" para cuando está quieto */
+        .card-floating {
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+            50% { transform: translateY(-12px) rotateX(2deg) rotateY(-2deg); }
+            100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
+        }
+
+        /* ELEMENTOS FLOTANTES */
+        .layer-1 { transform: translateZ(20px); } 
+        .layer-2 { transform: translateZ(30px); } 
+        .layer-3 { transform: translateZ(50px); } 
 
         .logo-img {
             max-width: 240px;
@@ -95,6 +112,7 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            pointer-events: none; /* Evita que arrastren la imagen en vez de la tarjeta */
         }
 
         h2 {
@@ -122,7 +140,6 @@
             font-weight: 400;
         }
 
-        /* BOTÓN WHATSAPP */
         .btn {
             display: inline-block;
             background-color: var(--terracota);
@@ -132,19 +149,17 @@
             border-radius: 50px;
             font-weight: bold;
             font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s ease;
             box-shadow: 0 5px 15px rgba(186, 83, 65, 0.3);
             border: 2px solid var(--terracota);
+            /* Importante para móvil: que el botón sea grande y fácil de tocar */
+            touch-action: manipulation;
         }
 
-        .btn:hover {
-            background-color: white;
-            color: var(--terracota);
-            transform: scale(1.05);
-            cursor: pointer;
+        .btn:active {
+            transform: scale(0.95);
         }
 
-        /* REDES SOCIALES */
         .social-icons {
             display: flex;
             gap: 15px;
@@ -162,23 +177,22 @@
             background-color: #fff;
             border: 1px solid #eee;
             color: var(--petroleo);
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease;
         }
-
+        
         .social-link svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+            width: 20px; height: 20px; fill: currentColor;
         }
 
-        .social-link:hover {
-            background-color: var(--petroleo);
-            color: white;
-            border-color: var(--petroleo);
-            transform: translateY(-3px);
+        /* Ajustes Mobile */
+        @media (max-width: 768px) {
+            .card-3d {
+                padding: 2.5rem 1.5rem;
+            }
+            .logo-img { max-width: 200px; }
+            p { font-size: 1rem; }
         }
 
-        /* FOOTER */
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -188,37 +202,7 @@
             position: relative;
             z-index: 10;
         }
-        
         footer a { color: var(--terracota); text-decoration: none; }
-
-        /* --- COMPORTAMIENTO MÓVIL (TÁCTIL) --- */
-        /* Si la pantalla es pequeña, desactivamos 3D mouse y activamos animación "viva" */
-        @media (max-width: 768px) {
-            body {
-                overflow-y: auto; /* Permitir scroll en móviles si la pantalla es muy chica */
-            }
-            
-            .card-3d {
-                transform: none !important; /* Anula el efecto del mouse JS */
-                animation: breathe 4s ease-in-out infinite; /* Animación de respiración */
-            }
-
-            .logo-img { max-width: 200px; }
-            
-            /* Ajuste de textos para móvil */
-            p { font-size: 1rem; }
-            h2 { font-size: 0.8rem; }
-            
-            /* En móvil los elementos no "flotan" tanto en Z para evitar cortes */
-            .layer-1, .layer-2, .layer-3 { transform: none; }
-        }
-
-        @keyframes breathe {
-            0% { transform: translateY(0px); box-shadow: 0 20px 50px rgba(27, 72, 83, 0.15); }
-            50% { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(27, 72, 83, 0.2); }
-            100% { transform: translateY(0px); box-shadow: 0 20px 50px rgba(27, 72, 83, 0.15); }
-        }
-
     </style>
 </head>
 <body>
@@ -227,39 +211,33 @@
 
     <div class="main-wrapper">
         <div class="card-container">
-            <div class="card-3d" id="card">
+            <div class="card-3d card-smooth-return card-floating" id="card">
                 
                 <div class="layer-1">
                     <img src="logo.png" alt="De La Monja" class="logo-img" onerror="this.style.display='none';">
                 </div>
 
                 <div class="layer-2">
-    <h2>Tapalpa, Jalisco</h2>
-    <div class="divider"></div>
-    <p>
-        Panadería Artesanal <br>
-        Cocina del Día <br>
-        Pizza a la Leña
-        <br><br>
-        <small><em>Estamos construyendo sabor...</em></small>
-    </p>
-</div>
+                    <h2>Tapalpa, Jalisco</h2>
+                    <div class="divider"></div>
+                    <p>
+                        Panadería Artesanal <br>
+                        Cocina del Día <br>
+                        Pizza a la Leña
+                        <br><br>
+                        <small><em>Estamos construyendo sabor...</em></small>
+                    </p>
+                </div>
 
                 <div class="layer-3">
-                    <a href="https://wa.me/523411224987" class="btn">
-                        Escríbenos por WhatsApp
+                    <a href="https://wa.me/523312345678" class="btn">
+                        Contáctanos por WhatsApp
                     </a>
 
                     <div class="social-icons">
-                        <a href="https://www.instagram.com/delamonjapanaderia" target="_blank" class="social-link" aria-label="Instagram">
-                            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                        </a>
-                        <a href="https://www.facebook.com/delamonjapanaderia" target="_blank" class="social-link" aria-label="Facebook">
-                            <svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
-                        </a>
-                        <a href="mailto:hola@delamonja.com" class="social-link" aria-label="Email">
-                            <svg viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
-                        </a>
+                        <a href="https://www.instagram.com/delamonjapanaderia" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                        <a href="https://www.facebook.com/delamonjapanaderia" target="_blank" class="social-link"><svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+                        <a href="mailto:hola@delamonja.com" class="social-link"><svg viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg></a>
                     </div>
                 </div>
 
@@ -273,54 +251,61 @@
     </footer>
 
     <script>
-        // --- 1. DETECCIÓN DE INTERACCIÓN (Desktop vs Móvil) ---
         const card = document.getElementById('card');
-        const container = document.querySelector('.main-wrapper');
+        const wrapper = document.querySelector('.main-wrapper');
 
-        // Función para Desktop: Mueve la tarjeta con el mouse
-        function activarEfectoMouse() {
-            container.addEventListener('mousemove', (e) => {
-                // Calculamos el centro de la pantalla
-                const xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
-                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-                
-                // Aplicamos la rotación
-                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            });
-
-            // Al salir el mouse, regresa al centro suavemente
-            container.addEventListener('mouseleave', () => {
-                card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            });
+        // --- LÓGICA DE MOVIMIENTO ---
+        function updateTransform(x, y) {
+            // Calculamos la rotación basada en la posición del puntero (mouse o dedo)
+            // Dividimos por números más grandes para que el efecto sea sutil y elegante
+            const xAxis = (window.innerWidth / 2 - x) / 20; 
+            const yAxis = (window.innerHeight / 2 - y) / 20;
+            
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         }
 
-        // Lógica de decisión: Solo activamos el script de mouse si la pantalla es grande
-        // y el dispositivo soporta "hover" (es decir, tiene puntero)
-        if (window.matchMedia("(min-width: 769px) and (hover: hover)").matches) {
-            activarEfectoMouse();
-        } 
-        // Si es móvil, el CSS se encarga de la animación "breathe" (respiración) automáticamente.
+        // --- DESKTOP (Mouse) ---
+        wrapper.addEventListener('mousemove', (e) => {
+            // Al mover el mouse, quitamos la animación de flotar y el suavizado lento
+            card.classList.remove('card-floating', 'card-smooth-return');
+            updateTransform(e.pageX, e.pageY);
+        });
 
-        // --- 2. GENERADOR DE CHISPAS/PARTÍCULAS ---
+        wrapper.addEventListener('mouseleave', () => {
+            // Al salir, regresamos el suavizado y la flotación
+            card.classList.add('card-smooth-return');
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            
+            // Esperamos a que termine el reset para volver a flotar
+            setTimeout(() => { card.classList.add('card-floating'); }, 500);
+        });
+
+        // --- MOBILE (Touch) ---
+        // Esto permite que al tocar y arrastrar el dedo, la tarjeta se mueva
+        wrapper.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Evita scroll de la página mientras mueves la tarjeta
+            card.classList.remove('card-floating', 'card-smooth-return');
+            
+            const touch = e.touches[0];
+            updateTransform(touch.clientX, touch.clientY);
+        }, { passive: false });
+
+        wrapper.addEventListener('touchend', () => {
+            card.classList.add('card-smooth-return');
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            setTimeout(() => { card.classList.add('card-floating'); }, 500);
+        });
+
+        // --- PARTÍCULAS ---
         const particlesContainer = document.getElementById('particles');
-        const particleCount = 25; // Cantidad de chispas
-
-        for (let i = 0; i < particleCount; i++) {
+        for (let i = 0; i < 25; i++) {
             const particle = document.createElement('div');
             particle.classList.add('particle');
-            
-            // Aleatoriedad para que se vea natural
-            const x = Math.random() * 100; // Posición horizontal
-            const delay = Math.random() * 5; // Retraso en inicio
-            const duration = 6 + Math.random() * 8; // Duración del vuelo
-            const size = Math.random() * 4 + 2; // Tamaño
-
-            particle.style.left = `${x}%`;
-            particle.style.animationDelay = `${delay}s`;
-            particle.style.animationDuration = `${duration}s`;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particle.style.animationDuration = `${6 + Math.random() * 8}s`;
+            particle.style.width = `${Math.random() * 4 + 2}px`;
+            particle.style.height = particle.style.width;
             particlesContainer.appendChild(particle);
         }
     </script>
