@@ -24,7 +24,7 @@
             min-height: 100vh;
             overflow: hidden; 
             perspective: 1000px;
-            /* Evita el "pull-to-refresh" en móviles para que no estorbe la interacción */
+            /* Evita el "pull-to-refresh" en móviles */
             overscroll-behavior-y: none; 
         }
 
@@ -79,16 +79,16 @@
             box-shadow: 0 20px 50px rgba(27, 72, 83, 0.15);
             text-align: center;
             transform-style: preserve-3d;
-            will-change: transform; /* Optimización para móviles */
+            will-change: transform;
             backdrop-filter: blur(5px);
         }
 
-        /* Animación suave de regreso cuando sueltas el mouse/dedo */
+        /* Animación suave de regreso */
         .card-smooth-return {
             transition: transform 0.5s ease-out;
         }
 
-        /* Animación de "respiración" para cuando está quieto */
+        /* Animación "respiración" (Idle) */
         .card-floating {
             animation: breathe 6s ease-in-out infinite;
         }
@@ -99,7 +99,7 @@
             100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
         }
 
-        /* ELEMENTOS FLOTANTES */
+        /* ELEMENTOS FLOTANTES (Capas Z) */
         .layer-1 { transform: translateZ(20px); } 
         .layer-2 { transform: translateZ(30px); } 
         .layer-3 { transform: translateZ(50px); } 
@@ -112,7 +112,7 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            pointer-events: none; /* Evita que arrastren la imagen en vez de la tarjeta */
+            pointer-events: none;
         }
 
         h2 {
@@ -136,10 +136,39 @@
             font-size: 1.1rem;
             line-height: 1.5;
             color: var(--negro);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem; /* Ajustado para dar espacio al link de ubicación */
             font-weight: 400;
         }
 
+        /* LINK DE UBICACIÓN */
+        .location-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 2rem;
+            color: var(--petroleo);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-bottom: 1px dotted rgba(186, 83, 65, 0.5);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .location-link:hover {
+            color: var(--terracota);
+            border-bottom-style: solid;
+            transform: translateY(-2px);
+        }
+
+        .location-link svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--terracota);
+        }
+
+        /* BOTONES */
         .btn {
             display: inline-block;
             background-color: var(--terracota);
@@ -152,7 +181,6 @@
             transition: all 0.2s ease;
             box-shadow: 0 5px 15px rgba(186, 83, 65, 0.3);
             border: 2px solid var(--terracota);
-            /* Importante para móvil: que el botón sea grande y fácil de tocar */
             touch-action: manipulation;
         }
 
@@ -180,15 +208,11 @@
             transition: transform 0.2s ease;
         }
         
-        .social-link svg {
-            width: 20px; height: 20px; fill: currentColor;
-        }
+        .social-link svg { width: 20px; height: 20px; fill: currentColor; }
 
         /* Ajustes Mobile */
         @media (max-width: 768px) {
-            .card-3d {
-                padding: 2.5rem 1.5rem;
-            }
+            .card-3d { padding: 2.5rem 1.5rem; }
             .logo-img { max-width: 200px; }
             p { font-size: 1rem; }
         }
@@ -227,10 +251,15 @@
                         <br><br>
                         <small><em>Estamos construyendo sabor...</em></small>
                     </p>
+
+                    <a href="https://www.google.com/maps/search/?api=1&query=Hidalgo+135+Centro+Tapalpa+Jalisco" target="_blank" class="location-link">
+                        <svg viewBox="0 0 24 24"><path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>
+                        Hidalgo 135, Centro
+                    </a>
                 </div>
 
                 <div class="layer-3">
-                    <a href="https://wa.me/523312345678" class="btn">
+                    <a href="https://wa.me/523411224987" class="btn">
                         Contáctanos por WhatsApp
                     </a>
 
@@ -256,34 +285,26 @@
 
         // --- LÓGICA DE MOVIMIENTO ---
         function updateTransform(x, y) {
-            // Calculamos la rotación basada en la posición del puntero (mouse o dedo)
-            // Dividimos por números más grandes para que el efecto sea sutil y elegante
             const xAxis = (window.innerWidth / 2 - x) / 20; 
             const yAxis = (window.innerHeight / 2 - y) / 20;
-            
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         }
 
         // --- DESKTOP (Mouse) ---
         wrapper.addEventListener('mousemove', (e) => {
-            // Al mover el mouse, quitamos la animación de flotar y el suavizado lento
             card.classList.remove('card-floating', 'card-smooth-return');
             updateTransform(e.pageX, e.pageY);
         });
 
         wrapper.addEventListener('mouseleave', () => {
-            // Al salir, regresamos el suavizado y la flotación
             card.classList.add('card-smooth-return');
             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            
-            // Esperamos a que termine el reset para volver a flotar
             setTimeout(() => { card.classList.add('card-floating'); }, 500);
         });
 
         // --- MOBILE (Touch) ---
-        // Esto permite que al tocar y arrastrar el dedo, la tarjeta se mueva
         wrapper.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Evita scroll de la página mientras mueves la tarjeta
+            e.preventDefault(); 
             card.classList.remove('card-floating', 'card-smooth-return');
             
             const touch = e.touches[0];
