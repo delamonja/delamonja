@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De La Monja | Tapalpa</title>
+    <style>
+        /* --- VARIABLES DE IDENTIDAD --- */
+        :root {
+            --terracota: #BA5341;
+            --petroleo: #1b4853;
+            --negro: #000000;
+            --fondo: #fcfcfc;
+            --dorado-suave: #eec996;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: var(--fondo);
+            color: var(--negro);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Evita scroll horizontal */
+            perspective: 1000px; /* Magia 3D */
+        }
+
+        /* --- FONDO ANIMADO (CHISPAS) --- */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--terracota);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        /* --- CONTENEDOR PRINCIPAL 3D --- */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card-3d {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(27, 72, 83, 0.1), 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out; /* Suavidad en el movimiento */
+            position: relative;
+        }
+
+        /* --- ELEMENTOS FLOTANTES (PARALLAX) --- */
+        .logo-img {
+            max-width: 260px;
+            width: 80%;
+            height: auto;
+            margin-bottom: 1.5rem;
+            transform: translateZ(30px); /* El logo flota "encima" de la tarjeta */
+        }
+
+        h2 {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--terracota);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            transform: translateZ(20px);
+        }
+
+        .divider {
+            width: 50px;
+            height: 3px;
+            background-color: var(--petroleo);
+            margin: 1rem auto;
+            border-radius: 2px;
+            transform: translateZ(20px);
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: var(--negro);
+            margin-bottom: 2rem;
+            transform: translateZ(25px);
+        }
+
+        /* --- BOTÓN INTERACTIVO --- */
+        .btn-container {
+            transform: translateZ(40px); /* El botón es lo que más flota */
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--terracota);
+            color: white;
+            padding: 16px 35px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Rebote suave */
+            box-shadow: 0 5px 15px rgba(186, 83, 65, 0.3);
+            border: 2px solid var(--terracota);
+        }
+
+        .btn:hover {
+            background-color: white;
+            color: var(--terracota);
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(186, 83, 65, 0.4);
+            cursor: pointer;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- REDES SOCIALES --- */
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 2rem;
+            transform: translateZ(35px);
+        }
+
+        .social-link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 1px solid #eee;
+            color: var(--petroleo);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .social-link:hover {
+            background-color: var(--petroleo);
+            color: white;
+            border-color: var(--petroleo);
+            transform: translateY(-3px) rotate(10deg);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--petroleo);
+            opacity: 0.8;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        footer a {
+            color: var(--terracota);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        footer a:hover {
+            color: var(--negro);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 600px) {
+            .card-3d {
+                padding: 2rem 1.5rem;
+                /* En móvil desactivamos la rotación compleja para ahorrar batería 
+                   y usamos una animación suave automática */
+                animation: floatCard 4s ease-in-out infinite;
+                transform: none !important; /* Sobrescribe el JS en móvil */
+            }
+            
+            .logo-img { max-width: 220px; }
+            h1 { font-size: 2.5rem; }
+            p { font-size: 1rem; }
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="main-wrapper">
+        <div class="card-3d" id="card">
+            <img src="logo.png" alt="De La Monja" class="logo-img" onerror="this.style.display='none';">
+            
+            <h2>Tapalpa, Jalisco</h2>
+            <div class="divider"></div>
+
+            <p>
+                Del horno de leña a tu mesa.<br>
+                <strong>Panadería • Cocina • Pizzería</strong>
+                <br><br>
+                Cocinando nuestra nueva experiencia digital.
+            </p>
+
+            <div class="btn-container">
+                <a href="https://wa.me/523312345678" class="btn">
+                    Ver Menú y Reservar
+                </a>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://www.instagram.com/delamonjapanaderia" target="_blank" class="social-link" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
