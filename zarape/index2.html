@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presupuesto | De la Monja — Zarape Remolque</title>
+  <title>Presupuesto Formal | De la Monja — Zarape Remolque</title>
   <style>
     :root {
       --black: #0b0b0b;
@@ -11,7 +11,7 @@
       --light-gray: #f4f4f4;
       --gray: #666666;
       --accent: #bb5341;
-      --border: #eeeeee;
+      --border: #dddddd;
     }
 
     * { box-sizing: border-box; }
@@ -21,169 +21,176 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--white);
       color: var(--black);
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .container {
-      max-width: 850px;
+      max-width: 800px;
       margin: 0 auto;
-      padding: 4rem 2rem;
+      padding: 3rem 2rem;
     }
 
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
       border-bottom: 2px solid var(--black);
-      padding-bottom: 2rem;
+      padding-bottom: 1.5rem;
     }
 
     .brand-info h1 {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 700;
       margin: 0;
       letter-spacing: -0.02em;
     }
 
     .brand-info p {
-      margin: 0.5rem 0 0 0;
+      margin: 0.3rem 0 0 0;
       color: var(--gray);
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     .logo-container img {
-      width: 120px;
+      width: 100px;
       height: auto;
-      display: block;
     }
 
     .client-box {
-      background: var(--light-gray);
-      padding: 1.5rem;
-      margin-bottom: 3rem;
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 1.2rem;
+      margin-bottom: 2.5rem;
+      border-radius: 4px;
     }
 
     .client-box label {
       text-transform: uppercase;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       letter-spacing: 0.1em;
       color: var(--gray);
       display: block;
+      margin-bottom: 0.3rem;
     }
 
     .client-box div {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
     }
 
     section {
-      margin-bottom: 2.5rem;
-      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
       border-bottom: 1px solid var(--border);
     }
 
     h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin: 0 0 0.25rem 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
     }
 
     .subtitle {
       color: var(--accent);
-      font-weight: 500;
-      font-size: 0.9rem;
+      font-weight: 600;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .description {
-      color: var(--gray);
+      color: var(--black);
       font-size: 0.95rem;
       margin-bottom: 1rem;
-    }
-
-    .data-list {
-      margin: 0 0 1.5rem 0;
-      padding: 0;
-      list-style: none;
-      font-size: 0.85rem;
-      color: var(--black);
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .data-list li {
-      display: flex;
-      align-items: center;
-    }
-
-    .data-list li::before {
-      content: "•";
-      color: var(--accent);
-      margin-right: 0.5rem;
-      font-weight: bold;
     }
 
     .job-row {
       display: flex;
       justify-content: flex-end;
-      align-items: center;
+      font-size: 1.2rem;
+      font-weight: 700;
     }
 
-    .job-total {
-      font-size: 1.2rem;
-      font-weight: 600;
+    /* Technical Notes Section */
+    .notes-section {
+      background: var(--light-gray);
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .notes-section h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-top: 0;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+
+    .notes-content p {
+      margin: 0.8rem 0;
+      color: #333;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+      font-family: monospace;
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ddd;
     }
 
     .grand-total-container {
-      margin-top: 3rem;
-      padding: 2rem;
+      margin-top: 2rem;
+      padding: 1.5rem;
       background: var(--black);
       color: var(--white);
-      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .grand-total-label {
-      font-size: 1.1rem;
-      font-weight: 400;
-    }
-
     .grand-total-amount {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--accent);
     }
 
-    footer {
+    .signature-area {
       margin-top: 4rem;
-      color: var(--gray);
-      font-size: 0.85rem;
       text-align: center;
-      border-top: 1px solid var(--border);
-      padding-top: 2rem;
     }
 
-    /* Mobile Friendly Styles */
+    .signature-line {
+      width: 250px;
+      margin: 0 auto 0.5rem;
+      border-top: 1px solid var(--black);
+    }
+
+    .signature-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      color: var(--gray);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
     @media (max-width: 600px) {
-      .container { padding: 2rem 1.2rem; }
-      header { flex-direction: column-reverse; align-items: flex-start; gap: 1.5rem; }
-      .brand-info h1 { font-size: 1.8rem; }
-      .data-list { flex-direction: column; gap: 0.5rem; }
-      .grand-total-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .grand-total-amount { font-size: 1.8rem; }
+      header { flex-direction: column-reverse; align-items: flex-start; gap: 1rem; }
+      .grand-total-container { flex-direction: column; text-align: center; gap: 0.5rem; }
     }
 
     @media print {
-      body { background: white; }
-      .container { padding: 1rem; }
-      .grand-total-container { border: 2px solid black; color: black !important; background: white !important; }
-      .grand-total-amount { color: black !important; }
+      .notes-section { border: 1px solid #ddd; background: none; }
+      .grand-total-container { border: 2px solid black; color: black; background: none; }
     }
   </style>
 </head>
@@ -196,7 +203,7 @@
       <p>Servicios de Cocina y Horno</p>
     </div>
     <div class="logo-container">
-      <img src="logo.png" alt="De la Monja Logo">
+      <img src="logo.png" alt="Logo">
     </div>
   </header>
 
@@ -208,49 +215,55 @@
   <main>
     <section>
       <h2>Servicio · Navidad</h2>
-      <div class="subtitle">Operación de hornos y terminación de producto</div>
+      <div class="subtitle">Operación Técnica de Horneado</div>
       <p class="description">
-        Servicio integral de uso de hornos y supervisión operativa para el horneado y terminado de productos previamente preparados por el cliente. Control preciso de temperatura y tiempos, rotación y monitoreo constante.
+        Uso de infraestructura, control térmico y terminación de productos entregados por el cliente.
       </p>
-      
-      <ul class="data-list">
-        <li>Costos de gas</li>
-        <li>Costos de operación</li>
-        <li>Honorarios de personal</li>
-      </ul>
-
-      <div class="job-row">
-        <div class="job-total">$2,630.82 MXN</div>
-      </div>
+      <div class="job-row">$2,630.82 MXN</div>
     </section>
 
     <section>
       <h2>Servicio · Año Nuevo</h2>
-      <div class="subtitle">Operación de hornos y terminación de producto</div>
+      <div class="subtitle">Operación Técnica de Horneado</div>
       <p class="description">
-        Servicio especializado de horneado y terminación de producto para operación de fin de año. Incluyó uso simultáneo de hornos, supervisión técnica continua y coordinación para salida a servicio en punto óptimo.
+        Supervisión técnica, manejo simultáneo de hornos y coordinación de salida a servicio.
       </p>
-
-      <ul class="data-list">
-        <li>Costos de gas</li>
-        <li>Costos de operación</li>
-        <li>Honorarios de personal</li>
-      </ul>
-
-      <div class="job-row">
-        <div class="job-total">$2,273.43 MXN</div>
-      </div>
+      <div class="job-row">$2,273.43 MXN</div>
     </section>
 
+    <div class="notes-section">
+      <h3>Notas Operativas y Desglose</h3>
+      <div class="notes-content">
+        <p>El servicio presupuestado corresponde exclusivamente a la supervisión, horneado y terminado de productos previamente preparados por el cliente. No incluye elaboración, preparación de recetas, panificación ni insumos alimenticios.</p>
+        
+        <p>El presupuesto está calculado en base al insumo principal (consumo de gas) y los recursos operativos asignados:</p>
+        
+        <div class="specs-grid">
+          <div>• Gas/Hora: $63.36</div>
+          <div>• Honorarios/Hora: $60.00</div>
+          <div>• Costo Operativo: 30%</div>
+        </div>
+
+        <p>Se consideran <strong>15 horas de horneado</strong> (combinando 2 hornos) y <strong>17.5 horas de trabajo</strong> de personal operativo.</p>
+        
+        <p>El costo de operación incluye: Limpieza profunda, suministro de agua, energía eléctrica, depreciación de hornos y equipo de cocina, consumibles, lavandería, logística de coordinación y entrega. El subtotal resultante integra el porcentaje de utilidad de <em>De la Monja</em>.</p>
+      </div>
+    </div>
+
     <div class="grand-total-container">
-      <div class="grand-total-label">Total Final</div>
-      <div class="grand-total-amount">$4,904.25 MXN</div>
+      <span>TOTAL FINAL</span>
+      <span class="grand-total-amount">$4,904.25 MXN</span>
+    </div>
+
+    <div class="signature-area">
+      <div class="signature-line"></div>
+      <div class="signature-name">Samantha Saavedra</div>
+      <div style="font-size: 0.8rem; color: var(--gray);">De la Monja — Dirección Operativa</div>
     </div>
   </main>
 
   <footer>
-    Colaboración basada en confianza, experiencia y control operativo.<br />
-    <strong>De la Monja — Cocina del día.</strong>
+    Agradecemos su confianza. Este documento formaliza los términos de la colaboración operativa recurrente.
   </footer>
 </div>
 
