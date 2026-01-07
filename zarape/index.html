@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presupuesto | De la Monja — Zarape Remolque</title>
+  <style>
+    :root {
+      --black: #0b0b0b;
+      --white: #ffffff;
+      --light-gray: #f4f4f4;
+      --gray: #666666;
+      --accent: #bb5341;
+      --border: #eeeeee;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4rem;
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 2rem;
+    }
+
+    .brand-info h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-info p {
+      margin: 0.5rem 0 0 0;
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .logo-container img {
+      width: 120px;
+      height: auto;
+      display: block;
+    }
+
+    .client-box {
+      background: var(--light-gray);
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+      border-radius: 8px;
+    }
+
+    .client-box label {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--gray);
+      display: block;
+    }
+
+    .client-box div {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem 0;
+    }
+
+    .subtitle {
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .job-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .job-total {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .grand-total-container {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--black);
+      color: var(--white);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grand-total-label {
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .grand-total-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 4rem;
+      color: var(--gray);
+      font-size: 0.85rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+    }
+
+    /* Mobile Friendly */
+    @media (max-width: 600px) {
+      .container { padding: 2rem 1.5rem; }
+      header { flex-direction: column-reverse; align-items: flex-start; gap: 1.5rem; }
+      .brand-info h1 { font-size: 1.8rem; }
+      .grand-total-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .grand-total-amount { font-size: 1.8rem; }
+    }
+
+    @media print {
+      body { background: white; }
+      .container { padding: 1rem; }
+      .grand-total-container { border: 2px solid black; color: black !important; background: white !important; }
+      .grand-total-amount { color: black !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand-info">
+      <h1>De la Monja</h1>
+      <p>Servicios de Cocina y Horno</p>
+    </div>
+    <div class="logo-container">
+      <img src="logo.png" alt="De la Monja Logo">
+    </div>
+  </header>
+
+  <div class="client-box">
+    <label>Cliente</label>
+    <div>ZARAPE Remolque</div>
+  </div>
+
+  <main>
+    <section>
+      <h2>Servicio · Navidad</h2>
+      <div class="subtitle">Operación de hornos y terminación de producto</div>
+      <p class="description">
+        Servicio integral de uso de hornos y supervisión operativa para el horneado y terminado de productos previamente preparados por el cliente. Control preciso de temperatura y tiempos, rotación y monitoreo constante. No se realizó preparación desde materia prima.
+      </p>
+      <div class="job-row">
+        <div class="job-total">$2,630.82 MXN</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Servicio · Año Nuevo</h2>
+      <div class="subtitle">Operación de hornos y terminación de producto</div>
+      <p class="description">
+        Servicio especializado de horneado y terminación de producto para operación de fin de año. Incluyó uso simultáneo de hornos, supervisión técnica continua y coordinación para salida a servicio en punto óptimo.
+      </p>
+      <div class="job-row">
+        <div class="job-total">$2,273.43 MXN</div>
+      </div>
+    </section>
+
+    <div class="grand-total-container">
+      <div class="grand-total-label">Total Final</div>
+      <div class="grand-total-amount">$4,904.25 MXN</div>
+    </div>
+  </main>
+
+  <footer>
+    Colaboración basada en confianza, experiencia y control operativo.<br />
+    <strong>De la Monja — Cocina del día.</strong>
+  </footer>
+</div>
+
+</body>
+</html>
